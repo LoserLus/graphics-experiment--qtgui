@@ -11,7 +11,7 @@ class CLine : public QObject
 public:
     CLine(QPoint* start=nullptr,QPoint* end=nullptr,QObject *parent = nullptr);
     ~CLine();
-    void drawLine();
+    void drawLine(QPainter* p,int width,int height);
     void setStart(int x,int y);
     void setEnd(int x,int y);
 private:

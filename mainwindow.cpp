@@ -153,7 +153,7 @@ void MainWindow::drawLineAlg(QPainter * p)
     CLine l;
     l.setStart(lineX1,lineY1);
     l.setEnd(lineX2,lineY2);
-    l.drawLine();
+    l.drawLine(p,windowWidth,windowHeight);
 
 }
 
@@ -182,7 +182,7 @@ void MainWindow::paintEvent(QPaintEvent *)
         break;
     case DRAW_LINE:
         //drawLineAlg(painter);
-        painter->drawLine(lineX1,lineY1,lineX2,lineY2);
+        //painter->drawLine(lineX1,lineY1,lineX2,lineY2);
         drawLineAlg(painter);
         break;
     case DRAW_CLOCK:
