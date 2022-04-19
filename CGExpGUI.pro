@@ -1,4 +1,5 @@
-QT       += core gui
+QT       += core gui\
+            opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,12 +13,18 @@ SOURCES += \
     cline.cpp \
     clock.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    paint3dwindow.cpp
 
 HEADERS += \
     cline.h \
     clock.h \
-    mainwindow.h
+    mainwindow.h \
+    paint3dwindow.h
+
+LIBS += -lGL \
+        -lglut\
+        -lGLU \
 
 FORMS += \
     mainwindow.ui
