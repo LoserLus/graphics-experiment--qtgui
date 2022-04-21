@@ -6,16 +6,14 @@ Paint3DWindow::Paint3DWindow(QWidget *parent):QGLWidget(parent)
     xroate=0.0f;
     yroate=0.0f;
     scale=0.5f;
-    //QTimer *timer = new QTimer(this);                   //创建一个定时器
-    //将定时器的计时信号与updateGL()绑定
-    //connect(timer, &QTimer::timeout, this, &Paint3DWindow::updateGL);
-    //timer->start(10);
+    test=0.0f;
 }
 
 void Paint3DWindow::draw3Dcube()
 {
     int i,j;
-    glColor3f( 1.0, 0.0, 0.0 );
+    glColor3f (0.0, 0.0, 0.0); // 设置前景色为黑色
+    glLineWidth (2.0); //设置线宽
     glBegin(GL_LINES);
     for(i=0; i<12; ++i) // 12 条线段
 
@@ -31,83 +29,72 @@ void Paint3DWindow::draw3Dcube()
 
 void Paint3DWindow::drawLightCube()
 {
-    GLfloat colors[][3] = {
-        { 1.0, 0.0, 0.0 },
-        { 1.0, 1.0, 0.0 },
-        { 0.0, 1.0, 0.0 },
-        { 0.0, 1.0, 1.0 },
-        { 1.0, 0.0, 1.0 },
-        { 0.0, 0.0, 1.0 }
-    };
-    //    glEnable(GL_LIGHT0); //使用第0号光照
-    //    glEnable(GL_LIGHTING); //在后面的渲染中使用光照
-    //    GLfloat sun_light_position[] = { -2.0f, 2.0f, 0.0f, 1.0f };
 
-    //定义  的漫反射特性
-    GLfloat mat_diffuse[]={
-        1.0, 0.0, 0.0,1.0,
-        1.0, 1.0, 0.0,1.0,
-        0.0, 1.0, 0.0,1.0,
-        0.0, 1.0, 1.0,1.0,
-        1.0, 0.0, 1.0,1.0,
-        0.0, 0.0, 1.0,1.0,
-    };
-    //    glLightfv(GL_LIGHT0, GL_POSITION, sun_light_position); //指定第0号光源的位置
+    // glClearColor(0.0,0.0,0.0,0.0);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBegin(GL_QUADS);                                  //开始绘制立方体
+    glNormal3f(0.0f, 1.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);                  //右上(顶面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, -1.0f);                 //左上(顶面)
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);                  //左下(顶面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);                   //右下(顶面)
 
-    //    for (int i = 0; i < 6; ++i)      // 有六个面，循环六次
-    //    {
-    //        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*i);
-    //        glColor3fv(colors[i]);
-    //        glBegin(GL_POLYGON);
-    //        for (int j = 0; j < 4; ++j)     // 每个面有四个顶点，循环四次
-    //            glVertex3fv(cube_vertex_list[cube_index_list[i][j]]);
-    //        glEnd();
-    //    }
+    glNormal3f(0.0f, -1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);                  //右上(底面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);                 //左上(底面)
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);                //左下(底面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);                 //右下(底面)
 
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);                   //右上(前面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);                  //左上(前面)
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);                 //左下(前面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);                  //右下(前面)
 
-    glBegin( GL_QUADS );
-    glColor3f( 0.0, 1.0, 0.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*0);
-    glVertex3f(  1.0,  1.0, -1.0 );
-    glVertex3f( -1.0,  1.0, -1.0 );
-    glVertex3f( -1.0,  1.0,  1.0 );
-    glVertex3f(  1.0,  1.0,  1.0 );
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);                 //右上(后面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);                //左上(后面)
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, -1.0f);                 //左下(后面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);                  //右下(后面)
 
-    glColor3f( 1.0, 0.5, 0.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*1);
-    glVertex3f(  1.0, -1.0,  1.0 );
-    glVertex3f( -1.0, -1.0,  1.0 );
-    glVertex3f( -1.0, -1.0, -1.0 );
-    glVertex3f(  1.0, -1.0, -1.0 );
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);                  //右上(左面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, -1.0f);                 //左上(左面)
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);                //左下(左面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);                 //右下(左面)
 
-    glColor3f( 1.0, 0.0, 0.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*2);
-    glVertex3f(  1.0,  1.0,  1.0 );
-    glVertex3f( -1.0,  1.0,  1.0 );
-    glVertex3f( -1.0, -1.0,  1.0 );
-    glVertex3f(  1.0, -1.0,  1.0 );
+    glNormal3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);                  //右上(右面)
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);                   //左上(右面)
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);                  //左下(右面)
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);                 //右下(右面)
+    glEnd();                                            //立方体绘制结束
 
-    glColor3f( 1.0, 1.0, 0.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*3);
-    glVertex3f(  1.0, -1.0, -1.0 );
-    glVertex3f( -1.0, -1.0, -1.0 );
-    glVertex3f( -1.0,  1.0, -1.0 );
-    glVertex3f(  1.0,  1.0, -1.0 );
-
-    glColor3f( 0.0, 0.0, 1.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*4);
-    glVertex3f( -1.0,  1.0,  1.0 );
-    glVertex3f( -1.0,  1.0, -1.0 );
-    glVertex3f( -1.0, -1.0, -1.0 );
-    glVertex3f( -1.0, -1.0,  1.0 );
-
-    glColor3f( 1.0, 0.0, 1.0 );
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse+4*5);
-    glVertex3f(  1.0,  1.0, -1.0 );
-    glVertex3f(  1.0,  1.0,  1.0 );
-    glVertex3f(  1.0, -1.0,  1.0 );
-    glVertex3f(  1.0, -1.0, -1.0 );
-    glEnd();
 }
 
 void Paint3DWindow::setState(PAINTER_STATE newState)
@@ -119,39 +106,54 @@ void Paint3DWindow::setState(PAINTER_STATE newState)
 void Paint3DWindow::initializeGL()
 {
 
-    glClearColor(1.0f,1.0f,1.0f,1.0f);
 
+
+    gluLookAt (x0, y0, z0, xref, yref, zref, Vx, Vy, Vz); //指定三维观察参数
+    glClearColor(1.0f,1.0f,1.0f,1.0f);
+    texture = bindTexture(QPixmap("/home/luyilong/QTCode/CGExpGUI/NeHe.bmp").toImage());       //载入位图并转换成纹理
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHT0); //使用第0号光照
-    glEnable(GL_LIGHTING); //在后面的渲染中使用光照
-    GLfloat sun_light_position[] = { -1.0f, 1.0f, 0.0f, 1.0f };
-    glLightfv(GL_LIGHT0, GL_POSITION, sun_light_position); //指定第0号光源的位置
+    GLfloat LightAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};  //环境光参数
+    GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};  //漫散光参数
+    GLfloat LightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f}; //光源位置
+    glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);     //设置环境光
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);     //设置漫射光
+    glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);   //设置光源位置
+    glEnable(GL_LIGHT1);                                //启动一号光源
 }
 
 void Paint3DWindow::resizeGL(int w, int h)
 {
     glViewport( 0, 0, (GLint)w, (GLint)h);
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    //     if (w <= h)
-    //             glOrtho(-2.0, 2.0, -2.0 * (GLfloat)h / (GLfloat)w,
-    //                 2.0 * (GLfloat)h / (GLfloat)w, -10.0, 10.0);
-    //         else
-    //             glOrtho(-2.0 * (GLfloat)w / (GLfloat)h,
-    //                 2.0 * (GLfloat)w / (GLfloat)h, -2.0, 2.0, -10.0, 10.0);
-    gluPerspective( 0.0, (GLfloat)w/(GLfloat)h, 1.0, 500.0 );
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
 
+    //    glMatrixMode( GL_PROJECTION );
+    //    glLoadIdentity();
+    //    glFrustum (-2.0f, 2.0f, -2.0f, 2.0f, 2.0f, 2.0f);//透视投影，设置透视视景体
+    //    //     if (w <= h)
+    //    //             glOrtho(-2.0, 2.0, -2.0 * (GLfloat)h / (GLfloat)w,
+    //    //                 2.0 * (GLfloat)h / (GLfloat)w, -10.0, 10.0);
+    //    //         else
+    //    //             glOrtho(-2.0 * (GLfloat)w / (GLfloat)h,
+    //    //                 2.0 * (GLfloat)w / (GLfloat)h, -2.0, 2.0, -10.0, 10.0);
+    //    //gluPerspective( 45.0, (GLfloat)w/(GLfloat)h, 0.8, 500.0 );
+    //    glMatrixMode( GL_MODELVIEW );
+    //    glLoadIdentity();
+    //    gluLookAt (x0, y0, z0, xref, yref, zref, Vx, Vy, Vz); //指定三维观察参数
 
 }
 
 void Paint3DWindow::paintGL()
 {
 
-    glMatrixMode( GL_MODELVIEW );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
+    if(perspective)
+        glFrustum (xwMin, xwMax, ywMin, ywMax, dnear, dfar);//透视投影，设置透视视景体
+    //    gluPerspective( 45.0, (GLfloat)this->width()/(GLfloat)this->height(), 3.0, 50.0 );
+    //glFrustum (-2.0f, 2.0f, -2.0f, 2.0f, 2.0f, 2.0f);//透视投影，设置透视视景体
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    glTranslatef(0,0,test);
     glScalef(scale,scale,scale);
     glRotatef(roate,1,1,1);
     glRotatef(xroate,1,0,0);
@@ -166,38 +168,6 @@ void Paint3DWindow::paintGL()
     default:
         break;
     }
-
-    //    glBegin( GL_TRIANGLES );
-    //    glColor3f( 1.0, 0.0, 0.0 );
-    //    glVertex3f(  0.0,  1.0,  0.0 );
-    //    glColor3f( 0.0, 1.0, 0.0 );
-    //    glVertex3f( -1.0, -1.0,  1.0 );
-    //    glColor3f( 0.0, 0.0, 1.0 );
-    //    glVertex3f(  1.0, -1.0,  1.0 );
-    //    glColor3f( 1.0, 0.0, 0.0 );
-    //    glVertex3f(  0.0,  1.0,  0.0 );
-    //    glColor3f( 0.0, 0.0, 1.0 );
-    //    glVertex3f(  1.0, -1.0,  1.0 );
-    //    glColor3f( 0.0, 1.0, 0.0 );
-    //    glVertex3f(  1.0, -1.0, -1.0 );
-    //    glColor3f( 1.0, 0.0, 0.0 );
-    //    glVertex3f(  0.0,  1.0,  0.0 );
-    //    glColor3f( 0.0, 1.0, 0.0 );
-    //    glVertex3f(  1.0, -1.0, -1.0 );
-    //    glColor3f( 0.0, 0.0, 1.0 );
-    //    glVertex3f( -1.0, -1.0, -1.0 );
-    //    glColor3f( 1.0, 0.0, 0.0 );
-    //    glVertex3f(  0.0,  1.0,  0.0 );
-    //    glColor3f( 0.0, 0.0, 1.0 );
-    //    glVertex3f( -1.0, -1.0, -1.0 );
-    //    glColor3f( 0.0, 1.0, 0.0 );
-    //    glVertex3f( -1.0, -1.0,  1.0 );
-    //    glEnd();
-
-
-    // glEnd();
-    // roate+=1;
-
 }
 
 void Paint3DWindow::keyPressEvent(QKeyEvent *event)
@@ -222,9 +192,29 @@ void Paint3DWindow::keyPressEvent(QKeyEvent *event)
         yroate+=1;
         break;
     case Qt::Key_Space:
-        roate=0;
-        xroate=0;
-        yroate=0;
+        roate=0.0f;
+        xroate=0.0f;
+        yroate=0.0f;
+        scale=0.5f;
+        test=0.0f;
+        light = false;
+        perspective=false;
+        break;
+    case Qt::Key_Up:
+        test+=0.1;
+        qDebug()<<"test value :"<<test;
+        break;
+    case Qt::Key_Down:
+        test-=0.1;
+        qDebug()<<"test value :"<<test;
+    case Qt::Key_P:
+        perspective=!perspective;
+    case Qt::Key_L:
+        light = !light;
+        if(light)
+            glEnable(GL_LIGHTING);
+        else
+            glDisable(GL_LIGHTING);
         break;
     default:
         break;

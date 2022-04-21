@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QGLWidget>
 #include <QKeyEvent>
+#include <QDebug>
 #include <QOpenGLFunctions>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -18,6 +19,20 @@ private:
     GLfloat scale;
     GLfloat xroate;
     GLfloat yroate;
+    GLfloat test;
+    bool perspective=false;
+    bool light=false;
+    /* 观察坐标系参数设置*/
+    GLfloat x0 = 0.0, y0= 0.0, z0 =5.0; // 设置观察坐标系原点
+    GLfloat xref = 0.0, yref =0.0, zref = 0.0; //设置观察坐标系参考点（视点）
+    GLfloat Vx = 0.0, Vy = 1.0, Vz = 0.0; // 设置观察坐标系向上向量（y轴）
+    /*观察体（视见体）参数设置 */
+    GLfloat xwMin = -1.0, ywMin = -1.0, xwMax = 1.0, ywMax = 1.0;//设置裁剪窗口坐标范围
+
+    GLfloat dnear = 1.0, dfar = 20.0;//设置远、近裁剪面深度范围
+
+    GLuint texture;
+
 
     // QOpenGLWidget interface
 public:
@@ -91,11 +106,11 @@ static const GLfloat cube_vertex_list[][3] = {
     -0.5f, 0.5f, 0.5f,
 };
 static const GLint cube_index_list[][4] = {
-        0, 1, 2, 3,//bottem
-        0, 3, 7, 4,//left
-        2, 3, 7, 6,//front
-        1, 2, 6, 5,//right
-        0, 1, 5, 4,//back
-        4, 5, 6, 7//top
-    };
+    0, 1, 2, 3,//bottem
+    0, 3, 7, 4,//left
+    2, 3, 7, 6,//front
+    1, 2, 6, 5,//right
+    0, 1, 5, 4,//back
+    4, 5, 6, 7//top
+};
 #endif // PAINT3DWINDOW_H
