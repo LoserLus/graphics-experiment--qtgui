@@ -109,16 +109,11 @@ void drawLightCubeAlg(QPainter*);
 void MainWindow::onDraw3DCubeAction()
 {
     stateChange(DRAW_3DCUBE);
-    if(paint3DWindow==nullptr)
-    {
-        paint3DWindow = new Paint3DWindow();
-    }
-    else
-    {
-        if(!paint3DWindow->isHidden())
-            paint3DWindow->hide();
 
-    }
+    paint3DWindow = new Paint3DWindow();
+    paint3DWindow->setAttribute(Qt::WA_DeleteOnClose,true);
+
+
     paint3DWindow->setState((Paint3DWindow::PAINTER_STATE)DRAW_3DCUBE);
     paint3DWindow->show();
 }
@@ -132,15 +127,11 @@ void MainWindow::onDrawBezierAction()
 void MainWindow::onDrawLightCubeAction()
 {
     stateChange(DRAW_LIGHTCUBE);
-    if(paint3DWindow==nullptr)
-    {
-        paint3DWindow = new Paint3DWindow();
-    }
-    else
-    {
-        if(!paint3DWindow->isHidden())
-            paint3DWindow->hide();
-    }
+
+
+    paint3DWindow = new Paint3DWindow();
+    paint3DWindow->setAttribute(Qt::WA_DeleteOnClose,true);
+
     paint3DWindow->setState((Paint3DWindow::PAINTER_STATE)DRAW_LIGHTCUBE);
     paint3DWindow->show();
 }
@@ -387,19 +378,19 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     if(event->button()== Qt::LeftButton)
     {
-            switch (state) {
-            case DRAW_LINE:
-                lineX2=event->x();
-                lineY2=event->y();
-                break;
-            case DRAW_POLYGON:
-            case DRAW_BEZIER:
-                pointList.push_back(event->pos());
-            default:
-                break;
+        switch (state) {
+        case DRAW_LINE:
+            lineX2=event->x();
+            lineY2=event->y();
+            break;
+        case DRAW_POLYGON:
+        case DRAW_BEZIER:
+            pointList.push_back(event->pos());
+        default:
+            break;
 
-            }
-            update();
+        }
+        update();
     }
     else if (event->button() == Qt::RightButton) {
         switch (state)
